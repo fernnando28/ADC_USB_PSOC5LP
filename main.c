@@ -1,11 +1,8 @@
 /* ========================================
  *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
+ *Programa para medir señal análogica tranformandola
+ *a digital y luego enviarla a la PC para se procesada 
+ *Para esto se utiliza un PSOC 5lp 
  *
  * ========================================
 */
@@ -47,14 +44,14 @@ CyDmaTdSetAddress(DMA_TD[0], LO16((uint32)ADC_DEC_SAMP_PTR), LO16((uint32)buffer
 CyDmaChSetInitialTd(DMA_Chan, DMA_TD[0]);
 CyDmaChEnable(DMA_Chan, 1);
 
-CyGlobalIntEnable; // Enable interrupts
+CyGlobalIntEnable; // Habilitar interrupciones 
 ADC_Start();
-USB_Start(0, USB_3V_OPERATION); // Start the USB peripheral
-while(!USB_GetConfiguration()); // Wait until USB is configured
-USB_EnableOutEP(2); // Enable our output endpoint (EP2)
+USB_Start(0, USB_3V_OPERATION); // Iniciar el USB periferico
+while(!USB_GetConfiguration()); // Esperar hasta que el USB configure 
+USB_EnableOutEP(2); // Habilitar el Endpoint de salida (EP2)
   
    
-/*Register SRAM buffers for IN and OUT EP endpoints. */
+/*Registre los búferes SRAM para los puntos finales EP IN y OUT. */
 USB_LoadInEP (1, (uint8 *)bufferIn, 64);
 USB_ReadOutEP(2, bufferOut, length);
 //USBUART_LoadInEP(USBUART_cdc_data_in_ep, adc_muestra, BUFER);
@@ -84,12 +81,12 @@ ADC_StartConvert(); // Enpezamos la conversión de la señal
             }    
             if(USB_GetEPState(2) == USB_OUT_BUFFER_EMPTY)
             {//if we have data
-               length = USB_GetEPCount(2); // Get the length of received data
-               USB_ReadOutEP(2, bufferOut, length); // Get the data
+               length = USB_GetEPCount(2); // Obtenga la longitud de los datos recibidos
+               USB_ReadOutEP(2, bufferOut, length); // Obtener Datos 
             }
             while(USB_GetEPState(1) != USB_IN_BUFFER_EMPTY)
             {
-               // Wait until our IN EP is empty 
+               // Espere hasta que nuestro Endpoint de entrada  esté vacío
             }
             USB_LoadInEP (1, (uint8 *)bufferIn, 64);
             USB_ReadOutEP(2, bufferOut, length);
@@ -106,4 +103,4 @@ ADC_StartConvert(); // Enpezamos la conversión de la señal
     }
 }
 
-/* [] END OF FILE */
+/* [] Finl del programa */
